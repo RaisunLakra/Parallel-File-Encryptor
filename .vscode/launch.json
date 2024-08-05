@@ -1,0 +1,52 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Debug encrypt_decrypt",
+//             "type": "lldb",
+//             "request": "launch",
+//             "program": "${workspaceFolder}/encrypt_decrypt",
+//             "args": [],
+//             "cwd": "${workspaceFolder}",
+//             "preLaunchTask": "Build"
+//         },
+//         {
+//             "name": "Cryption standalone",
+//             "type": "lldb",
+//             "request": "launch",
+//             "program": "${workspaceFolder}/cryption",
+//             "args": ["your_task_data_here"],
+//             "cwd": "${workspaceFolder}",
+//             "preLaunchTask": "Build"
+//         }
+//     ],
+//     "compounds": []
+// }
+
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug encrypt_decrypt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/encrypt_decrypt",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build",
+            "MIMode": "lldb"
+        },
+        {
+            "name": "Cryption standalone",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/cryption",
+            "args": ["your_task_data_here"],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build",
+            "MIMode": "lldb"
+        }
+    ],
+    "compounds": []
+}
