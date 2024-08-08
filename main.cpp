@@ -5,54 +5,43 @@
 
 namespace fs = std::filesystem;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
     std::string directory;
     std::string action;
 
-    std::cout << "Enter the directory path : ";
+    std::cout << "Enter the directory path: ";
     std::getline(std::cin, directory);
 
-    std::cout << "Enter the action (Encrypt/Decrypt): ";
+    std::cout << "Enter the action (encrypt/decrypt): ";
     std::getline(std::cin, action);
 
-    try
-    {
-        if (fs::exists(directory) && fs::is_directory(directory))
-        {
+    try {
+        if (fs::exists(directory) && fs::is_directory(directory)) {
             ProcessManagement processManagement;
-            for (const auto &entry : fs::recursive_directory_iterator(directory))
-            {
-                if (entry.is_regular_file())
-                {
+
+            for (const auto& entry : fs::recursive_directory_iterator(directory)) {
+                if (entry.is_regular_file()) {
                     std::string filePath = entry.path().string();
                     IO io(filePath);
-                    std::fstream f_stream = std::move(io.get_fileStream());
-                    if (f_stream.is_open())
-                    {
-                        Action taskAction = (action == "ENCRYPT" || action == "encrypt") ? Action::ENCRYPT : Action::DECRYPT;
+                    std::fstream f_stream = std::move(io.getFileStream());
+
+                    if (f_stream.is_open()) {
+                        Action taskAction = (action == "encrypt") ? Action::ENCRYPT : Action::DECRYPT;
                         auto task = std::make_unique<Task>(std::move(f_stream), taskAction, filePath);
                         processManagement.submitToQueue(std::move(task));
-                    }
-                    else
-                    {
-                        std::cerr << "Failed to open file: " << filePath << '\n';
+                    } else {
+                        std::cout << "Unable to open file: " << filePath << std::endl;
                     }
                 }
             }
+
             processManagement.executeTasks();
+        } else {
+            std::cout << "Invalid directory path!" << std::endl;
         }
-        else
-        {
-            std::cerr << "Invalid directory path: " << directory << '\n';
-        }
+    } catch (const fs::filesystem_error& ex) {
+        std::cout << "Filesystem error: " << ex.what() << std::endl;
     }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        std::cerr << "FileSystem Error: " << e.what() << '\n';
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+
+    return 0;
 }
